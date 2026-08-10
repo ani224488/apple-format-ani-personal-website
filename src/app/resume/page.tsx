@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { basePath } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Resume — Ani",
@@ -29,7 +30,7 @@ export default function ResumePage() {
       <div className="flex items-baseline justify-between gap-4">
         <h1 className="text-3xl font-semibold tracking-[-0.02em]">Resume</h1>
         <a
-          href="/resume.pdf"
+          href={`${basePath}/resume.pdf`}
           className="shrink-0 rounded-full border border-surface-border bg-surface px-4 py-2 text-sm font-medium transition-transform duration-150 ease-out active:scale-[0.97]"
         >
           Download PDF
