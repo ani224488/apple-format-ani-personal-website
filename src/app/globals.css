@@ -72,30 +72,78 @@ body {
 .hero-glow {
   position: absolute;
   border-radius: 9999px;
-  filter: blur(70px);
+  filter: blur(90px);
   pointer-events: none;
   z-index: 0;
-  opacity: 0.55;
+  opacity: 0.5;
 }
 
 .hero-glow-1 {
-  top: -10%;
-  left: -10%;
-  height: 380px;
-  width: 380px;
+  top: -15%;
+  left: -15%;
+  height: 620px;
+  width: 620px;
   background: radial-gradient(closest-side, var(--accent), transparent 70%);
 }
 
 .hero-glow-2 {
-  top: 5%;
-  right: -15%;
-  height: 320px;
-  width: 320px;
+  top: 0%;
+  right: -20%;
+  height: 560px;
+  width: 560px;
   background: radial-gradient(closest-side, var(--accent-secondary), transparent 70%);
 }
 
+.hero-glow-3 {
+  top: 55%;
+  left: 20%;
+  height: 640px;
+  width: 640px;
+  background: radial-gradient(closest-side, var(--accent), transparent 70%);
+  opacity: 0.3;
+}
+
 :root.light .hero-glow {
-  opacity: 0.28;
+  opacity: 0.22;
+}
+
+:root.light .hero-glow-3 {
+  opacity: 0.15;
+}
+
+.geo-grid {
+  background-image:
+    linear-gradient(var(--surface-border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--surface-border) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+@keyframes radar-pulse {
+  from {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  to {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+
+.radar-ring {
+  position: absolute;
+  inset: 0;
+  height: 36px;
+  width: 36px;
+  border-radius: 9999px;
+  border: 1px solid var(--accent);
+  animation: radar-pulse 2.4s cubic-bezier(0.23, 1, 0.32, 1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .radar-ring {
+    animation: none;
+    opacity: 0.25;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
