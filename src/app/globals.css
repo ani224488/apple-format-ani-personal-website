@@ -7,6 +7,7 @@
   --surface-border: rgba(255, 255, 255, 0.12);
   --muted: #a1a1a6;
   --accent: #0a84ff;
+  --accent-secondary: #bf5af2;
   --accent-foreground: #ffffff;
   --font-system: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
     "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -19,6 +20,7 @@
   --surface-border: rgba(0, 0, 0, 0.08);
   --muted: #6e6e73;
   --accent: #0071e3;
+  --accent-secondary: #af52de;
   --accent-foreground: #ffffff;
 }
 
@@ -65,6 +67,35 @@ body {
 
 .fade-up {
   animation: fade-up 500ms cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+
+.hero-glow {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(70px);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.55;
+}
+
+.hero-glow-1 {
+  top: -10%;
+  left: -10%;
+  height: 380px;
+  width: 380px;
+  background: radial-gradient(closest-side, var(--accent), transparent 70%);
+}
+
+.hero-glow-2 {
+  top: 5%;
+  right: -15%;
+  height: 320px;
+  width: 320px;
+  background: radial-gradient(closest-side, var(--accent-secondary), transparent 70%);
+}
+
+:root.light .hero-glow {
+  opacity: 0.28;
 }
 
 @media (prefers-reduced-motion: reduce) {
