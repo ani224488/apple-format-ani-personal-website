@@ -14,6 +14,16 @@ const projects = [
       { label: "Source", href: "https://github.com/ani224488/apple-format-ani-personal-website" },
     ],
   },
+  {
+    title: "Whoop Ambient Coach",
+    description:
+      "A concept redesign of WHOOP's AI coach — folding coaching insights directly into the Recovery, Strain, and Sleep rings as they draw, instead of behind a separate chat screen. Built as a business case study. Not affiliated with, endorsed by, or built using any proprietary WHOOP materials.",
+    tags: ["Next.js", "TypeScript", "Tailwind CSS", "Motion"],
+    status: "In progress — not live yet",
+    links: [
+      { label: "Source", href: "https://github.com/ani224488/whoop-ambient-coach" },
+    ],
+  },
 ];
 
 export default function ProjectsPage() {
@@ -31,7 +41,14 @@ export default function ProjectsPage() {
             className="fade-up rounded-2xl border border-surface-border bg-surface p-6 transition-transform duration-200 ease-out hover:-translate-y-0.5"
             style={{ animationDelay: `${i * 60}ms` }}
           >
-            <h2 className="font-medium">{project.title}</h2>
+            <div className="flex items-center gap-2">
+              <h2 className="font-medium">{project.title}</h2>
+              {project.status && (
+                <span className="rounded-full border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-[11px] font-medium text-amber-600 dark:text-amber-400">
+                  {project.status}
+                </span>
+              )}
+            </div>
             <p className="mt-2 text-sm leading-6 text-muted">
               {project.description}
             </p>
