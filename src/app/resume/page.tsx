@@ -123,13 +123,16 @@ function SectionHeading({ children }: { children: React.ReactNode }) {
 
 export default function ResumePage() {
   return (
-    <div className="fade-up">
+    // Resume is dense prose — it keeps its own reading measure inside the
+    // wider page shell rather than stretching to the full container.
+    <div className="fade-up mx-auto max-w-3xl">
       <div className="flex flex-wrap items-baseline justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-semibold tracking-[-0.02em]">
+          <p className="text-sm font-medium text-accent">Resume</p>
+          <h1 className="mt-2 text-[clamp(2rem,5vw,2.75rem)] font-semibold leading-[1.1] tracking-[-0.03em]">
             Anirudh Undrakonda
           </h1>
-          <p className="mt-1 text-muted">
+          <p className="mt-3 text-muted">
             Associate Software Engineer · Data Pipelines &amp; ETL · Cloud ·
             Python · SQL
           </p>

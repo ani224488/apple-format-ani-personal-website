@@ -21,7 +21,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           disableTransitionOnChange
         >
           <Nav />
-          <main className="flex-1 w-full max-w-3xl mx-auto px-6 py-16">
+          <main className="flex-1 w-full max-w-6xl mx-auto px-5 sm:px-8 lg:px-12 py-14 sm:py-20">
             <PageTransition>{children}</PageTransition>
           </main>
           <Footer />

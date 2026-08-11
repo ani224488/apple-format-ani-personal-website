@@ -14,6 +14,10 @@ import {
   LayersIcon,
 } from "@/components/icons";
 import { GeoMap } from "@/components/geo-map";
+import { HeroGlows } from "@/components/hero-glows";
+import { Reveal } from "@/components/reveal";
+import { ScrollStatement } from "@/components/scroll-statement";
+import { projects } from "@/lib/projects";
 
 const links = [
   { label: "Email", href: "mailto:aniundrakonda@gmail.com", icon: EmailIcon },
@@ -38,23 +42,25 @@ const toolkit = [
 ];
 
 export default function Home() {
-  return (
-    <div className="relative isolate overflow-hidden">
-      <div className="hero-glow hero-glow-1" aria-hidden />
-      <div className="hero-glow hero-glow-2" aria-hidden />
-      <div className="hero-glow hero-glow-3" aria-hidden />
+  const featured = projects[0];
 
-      <div className="relative z-10 flex min-h-[65vh] flex-col justify-center">
-        <div className="flex flex-col items-start gap-6 sm:flex-row sm:items-center sm:gap-8">
+  return (
+    // overflow-x-clip rather than overflow-hidden: clip contains the glows
+    // without creating a scroll container, which would break sticky below.
+    <div className="relative isolate overflow-x-clip">
+      <HeroGlows />
+
+      <div className="relative z-10 flex min-h-[calc(100svh-9rem)] flex-col justify-center">
+        <div className="flex flex-col items-start gap-6 sm:flex-row sm:items-center sm:gap-10">
           <div
-            className="fade-up h-32 w-32 shrink-0 overflow-hidden rounded-full border border-surface-border bg-surface shadow-[0_8px_30px_rgba(0,0,0,0.35)] sm:h-40 sm:w-40"
+            className="fade-up h-28 w-28 shrink-0 overflow-hidden rounded-full border border-surface-border bg-surface shadow-[0_8px_30px_rgba(0,0,0,0.35)] sm:h-40 sm:w-40 lg:h-48 lg:w-48"
             style={{ animationDelay: "0ms" }}
           >
             <Image
               src={`${basePath}/profile.png`}
               alt="Portrait of Ani"
-              width={160}
-              height={160}
+              width={192}
+              height={192}
               priority
               className="h-full w-full object-cover"
             />
@@ -68,7 +74,7 @@ export default function Home() {
               Hey, I&rsquo;m
             </p>
             <h1
-              className="fade-up text-[clamp(2.5rem,7vw,4rem)] font-semibold leading-[1.05] tracking-[-0.03em]"
+              className="fade-up text-[clamp(2.75rem,8vw,5.5rem)] font-semibold leading-[1.02] tracking-[-0.035em]"
               style={{ animationDelay: "120ms" }}
             >
               Ani.
@@ -94,7 +100,7 @@ export default function Home() {
         </div>
 
         <p
-          className="fade-up mt-8 max-w-lg text-lg leading-8 text-muted"
+          className="fade-up mt-8 max-w-xl text-lg leading-8 text-muted sm:text-xl sm:leading-9"
           style={{ animationDelay: "240ms" }}
         >
           I write code, and apparently now I write websites about writing
@@ -122,8 +128,24 @@ export default function Home() {
         </div>
       </div>
 
-      <section className="relative z-10 mt-24 grid gap-10 sm:grid-cols-[1.1fr_1fr] sm:items-center">
-        <div className="fade-up">
+      <section className="relative z-10 py-28 sm:py-44">
+        <ScrollStatement text="I didn't take a straight line to get here. Technology is only ever as good as the people behind it, and the best people I've met were the ones willing to learn something new." />
+
+        <Reveal delay={0.15}>
+          <div className="mx-auto mt-10 max-w-xl px-6 text-center">
+            <p className="text-[1.05rem] leading-7 text-muted">
+              Your path doesn&rsquo;t have to be laid out in front of you. Work
+              with what you have, stay curious, and keep going until you land
+              somewhere you&rsquo;re glad to be. That&rsquo;s most of what I
+              believe about this work — and about people.
+            </p>
+            <p className="mt-5 text-sm font-medium text-accent">— Ani</p>
+          </div>
+        </Reveal>
+      </section>
+
+      <section className="relative z-10 grid gap-10 sm:grid-cols-[1.1fr_1fr] sm:items-center">
+        <Reveal>
           <h2 className="text-sm font-semibold uppercase tracking-[0.08em] text-muted">
             About
           </h2>
@@ -152,31 +174,79 @@ export default function Home() {
               </span>
             ))}
           </div>
-        </div>
+        </Reveal>
 
-        <div className="fade-up" style={{ animationDelay: "80ms" }}>
+        <Reveal delay={0.1}>
           <GeoMap />
+        </Reveal>
+      </section>
+
+      <section className="relative z-10 mt-32 sm:mt-44">
+        <div className="grid gap-8 sm:grid-cols-[minmax(0,190px)_1fr] sm:gap-12">
+          <div className="sm:sticky sm:top-28 sm:self-start">
+            <Reveal>
+              <h2 className="text-sm font-semibold uppercase tracking-[0.08em] text-muted">
+                Toolkit
+              </h2>
+              <p className="mt-3 text-sm leading-6 text-muted">
+                What I reach for on most days, roughly in order of how often.
+              </p>
+            </Reveal>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+            {toolkit.map(({ label, icon: Icon }, i) => (
+              <Reveal key={label} delay={i * 0.05}>
+                <div className="flex h-full flex-col items-start gap-3 rounded-2xl border border-surface-border bg-surface p-4 transition-transform duration-200 ease-out hover:-translate-y-0.5">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-full bg-background text-accent">
+                    <Icon />
+                  </span>
+                  <span className="text-sm text-muted">{label}</span>
+                </div>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </section>
 
-      <section className="relative z-10 mt-24">
-        <h2 className="text-sm font-semibold uppercase tracking-[0.08em] text-muted">
-          Toolkit
-        </h2>
-        <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
-          {toolkit.map(({ label, icon: Icon }, i) => (
+      <section className="relative z-10 mt-32 sm:mt-44">
+        <Reveal>
+          <Link
+            href={`/projects/${featured.slug}`}
+            className="group relative block overflow-hidden rounded-3xl border border-surface-border bg-surface p-8 transition-all duration-300 ease-out hover:-translate-y-1 hover:border-accent/40 sm:p-12"
+          >
             <div
-              key={label}
-              className="fade-up flex flex-col items-start gap-3 rounded-2xl border border-surface-border bg-surface p-4 transition-transform duration-200 ease-out hover:-translate-y-0.5"
-              style={{ animationDelay: `${i * 40}ms` }}
-            >
-              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-background text-accent">
-                <Icon />
+              aria-hidden
+              className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full opacity-40 blur-[70px] transition-opacity duration-500 group-hover:opacity-70"
+              style={{
+                background:
+                  "radial-gradient(closest-side, var(--accent), transparent 70%)",
+              }}
+            />
+            <div className="relative">
+              <p className="text-sm font-medium text-accent">Latest project</p>
+              <h2 className="mt-3 text-[clamp(1.75rem,4vw,2.5rem)] font-semibold leading-[1.1] tracking-[-0.03em]">
+                {featured.title}
+              </h2>
+              <p className="mt-4 max-w-xl text-[1.05rem] leading-7 text-muted">
+                {featured.tagline}
+              </p>
+              <p className="mt-4 max-w-xl text-sm leading-6 text-muted">
+                There&rsquo;s a small interactive demo built into the page — you
+                can click through the whole flow yourself, right in the browser.
+              </p>
+              <span className="mt-8 inline-flex items-center gap-1.5 text-sm font-medium text-accent">
+                Try the walkthrough
+                <span
+                  aria-hidden
+                  className="transition-transform duration-200 ease-out group-hover:translate-x-1"
+                >
+                  &rarr;
+                </span>
               </span>
-              <span className="text-sm text-muted">{label}</span>
             </div>
-          ))}
-        </div>
+          </Link>
+        </Reveal>
       </section>
     </div>
   );

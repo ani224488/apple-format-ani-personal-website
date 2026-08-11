@@ -6,9 +6,12 @@ export const metadata: Metadata = {
 
 export default function NowPage() {
   return (
-    <div className="fade-up">
-      <h1 className="text-3xl font-semibold tracking-[-0.02em]">Now</h1>
-      <p className="mt-2 text-sm text-muted">
+    <div className="fade-up mx-auto max-w-3xl">
+      <p className="text-sm font-medium text-accent">Now</p>
+      <h1 className="mt-2 text-[clamp(2rem,5vw,2.75rem)] font-semibold leading-[1.1] tracking-[-0.03em]">
+        What I&rsquo;m up to.
+      </h1>
+      <p className="mt-3 max-w-md text-[1.05rem] leading-7 text-muted">
         What I&rsquo;m exploring and planning to build next.
       </p>
 
