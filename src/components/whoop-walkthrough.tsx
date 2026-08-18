@@ -134,7 +134,10 @@ export function WhoopWalkthrough() {
         </p>
       </div>
 
-      <div className="relative min-h-[310px] px-5 py-7 sm:px-8">
+      {/* Taller floor on narrow screens: the same step content wraps to more
+          lines there, so a single min-height sized for desktop let the panel
+          resize between steps. */}
+      <div className="relative min-h-[380px] px-5 py-7 sm:min-h-[330px] sm:px-8">
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={step}
@@ -260,10 +263,15 @@ function Ring({
   markerKey,
   size = 168,
   animate = true,
+  className,
 }: {
   markerKey: BiomarkerKey;
   size?: number;
   animate?: boolean;
+  /* CSS width/height override the width/height attributes, and the viewBox
+     scales the labels with it — so a responsive class resizes the whole ring
+     without a second set of type sizes. */
+  className?: string;
 }) {
   const reduced = useReducedMotion();
   const b = BIOMARKERS.find((x) => x.key === markerKey)!;
@@ -275,7 +283,12 @@ function Ring({
   const shouldAnimate = animate && !reduced;
 
   return (
-    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="shrink-0">
+    <svg
+      width={size}
+      height={size}
+      viewBox={`0 0 ${size} ${size}`}
+      className={`shrink-0 ${className ?? ""}`}
+    >
       <circle
         cx={size / 2}
         cy={size / 2}
@@ -342,7 +355,9 @@ function useTypewriter(text: string, delay: number) {
         i += 1;
         setShown(text.slice(0, i));
         if (i >= text.length) clearInterval(interval);
-      }, 16);
+        // 24ms rather than 16: a 16ms interval asks for a React re-render every
+        // frame, which is most of a phone's frame budget spent on one string.
+      }, 24);
     }, delay);
 
     return () => {
@@ -354,14 +369,51 @@ function useTypewriter(text: string, delay: number) {
   return { shown, done: shown.length >= text.length };
 }
 
+/**
+ * Renders the typed text on top of an invisible copy of the finished string, so
+ * the box is already at its final height on the very first character.
+ *
+ * Without it the container grows line by line as the text arrives and pushes
+ * the Back/Next buttons down the screen while you're mid-read — which is what
+ * made the demo feel like it was jumping around on a phone. `visibility:
+ * hidden` still occupies layout, which is the whole point; `display: none`
+ * would not.
+ */
+function TypedLine({
+  full,
+  shown,
+  done,
+  className,
+}: {
+  full: string;
+  shown: string;
+  done: boolean;
+  className?: string;
+}) {
+  return (
+    <div className={`relative ${className ?? ""}`}>
+      <p className="invisible" aria-hidden>
+        {full}
+      </p>
+      <p className="absolute inset-0">
+        {shown}
+        {!done && <span className="demo-caret" aria-hidden />}
+      </p>
+    </div>
+  );
+}
+
 function InsightStep({ goal, markerKey }: { goal: Goal; markerKey: BiomarkerKey }) {
   const insight = INSIGHTS[markerKey][goal];
   const { shown, done } = useTypewriter(insight, 900);
   const goalLabel = GOALS.find((g) => g.key === goal)?.label;
 
   return (
-    <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:gap-8">
-      <Ring markerKey={markerKey} />
+    <div className="flex flex-col items-center gap-5 sm:flex-row sm:items-start sm:gap-8">
+      <Ring
+        markerKey={markerKey}
+        className="h-[132px] w-[132px] sm:h-[168px] sm:w-[168px]"
+      />
       <div className="flex-1">
         <div className="flex items-center gap-2">
           <p className="text-[11px] uppercase tracking-[0.12em] text-[var(--demo-muted)]">
@@ -371,10 +423,12 @@ function InsightStep({ goal, markerKey }: { goal: Goal; markerKey: BiomarkerKey 
             {goalLabel}
           </span>
         </div>
-        <p className="mt-3 min-h-[7rem] text-[1.05rem] leading-7">
-          {shown}
-          {!done && <span className="demo-caret" aria-hidden />}
-        </p>
+        <TypedLine
+          full={insight}
+          shown={shown}
+          done={done}
+          className="mt-3 text-[1.05rem] leading-7"
+        />
         <p className="mt-1 text-xs leading-5 text-[var(--demo-muted)]">
           No tap. No chat screen. The ring finishes drawing and the reading is
           already there.
@@ -414,10 +468,12 @@ function NutritionStep({ goal }: { goal: Goal }) {
         <p className="text-[11px] uppercase tracking-[0.12em] text-[var(--demo-muted)]">
           Coach
         </p>
-        <p className="mt-2 min-h-[5rem] max-w-lg text-[1.05rem] leading-7">
-          {shown}
-          {!done && <span className="demo-caret" aria-hidden />}
-        </p>
+        <TypedLine
+          full={insight}
+          shown={shown}
+          done={done}
+          className="mt-2 max-w-lg text-[1.05rem] leading-7"
+        />
         <p className="mt-1 text-xs leading-5 text-[var(--demo-muted)]">
           Recovery, strain, and sleep all sit downstream of what you ate and
           when. This tab was the piece I added that the real app doesn&rsquo;t

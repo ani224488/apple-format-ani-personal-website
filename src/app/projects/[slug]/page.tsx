@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { projects, getProject } from "@/lib/projects";
 import { WhoopWalkthrough } from "@/components/whoop-walkthrough";
+import { PortalDemo } from "@/components/portal-demo";
 import { Reveal } from "@/components/reveal";
 
 export function generateStaticParams() {
@@ -133,6 +134,23 @@ export default async function ProjectDetailPage({
           </p>
           <Reveal className="mt-6">
             <WhoopWalkthrough />
+          </Reveal>
+        </section>
+      )}
+
+      {project.portalDemo && (
+        <section className="mt-14">
+          <SectionHeading>The portal</SectionHeading>
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-muted">
+            <span className="font-medium text-foreground">
+              Also live — poke at it.
+            </span>{" "}
+            A slice of the seven-screen portal: tap a ring and the coaching
+            opens against it, log a meal and watch the coaching account for it,
+            drag the cycle day and every reading is re-read against the phase.
+          </p>
+          <Reveal className="mt-6">
+            <PortalDemo />
           </Reveal>
         </section>
       )}

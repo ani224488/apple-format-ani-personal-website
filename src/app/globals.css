@@ -114,6 +114,38 @@ body {
   --glow-base: 0.15;
 }
 
+/* Phones get the same look at a fraction of the fill cost. A 620px circle
+   under blur(90px) makes the compositor rasterise a surface far larger than
+   the screen; at this size and radius the glow covers the same proportion of
+   a narrow viewport while the blurred area drops by roughly three quarters.
+   Paired with HeroGlows holding still on compact screens. */
+@media (max-width: 767px) {
+  .hero-glow {
+    filter: blur(52px);
+  }
+
+  .hero-glow-1 {
+    top: -8%;
+    left: -14%;
+    height: 300px;
+    width: 300px;
+  }
+
+  .hero-glow-2 {
+    top: 2%;
+    right: -14%;
+    height: 280px;
+    width: 280px;
+  }
+
+  .hero-glow-3 {
+    top: 52%;
+    left: 6%;
+    height: 320px;
+    width: 320px;
+  }
+}
+
 .geo-grid {
   background-image:
     linear-gradient(var(--surface-border) 1px, transparent 1px),
@@ -160,9 +192,17 @@ body {
   --demo-green: #16d97a;
   --demo-yellow: #ffd60a;
   --demo-red: #ff453a;
-  background: var(--demo-bg);
+  --demo-cycle: #c084a0;
+  /* Lit from above, the way a screen behind glass is. The gradient sits over
+     the flat ground rather than replacing it, so --demo-bg stays the token
+     everything else is reasoned against. */
+  background:
+    radial-gradient(120% 80% at 50% -10%, rgba(255, 255, 255, 0.055), transparent 60%),
+    var(--demo-bg);
   color: var(--demo-ink);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
 }
 
 @keyframes caret-blink {
@@ -191,6 +231,83 @@ body {
     animation: none;
     opacity: 0;
   }
+}
+
+/* The cycle-day slider. A default range input is the one control in either demo
+   that looks like a browser rather than like the product, so it gets a track and
+   a thumb built from the same tokens as everything else. Both WebKit and Moz
+   pseudo-elements are needed; they cannot be combined into one rule, because a
+   selector either engine doesn't recognise invalidates the whole block. */
+.demo-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 22px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.demo-range::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.demo-range::-moz-range-track {
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.demo-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  margin-top: -7px;
+  border-radius: 50%;
+  background: var(--demo-ink);
+  border: none;
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(0, 0, 0, 0.25);
+  transition: transform 150ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.demo-range::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--demo-ink);
+  border: none;
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(0, 0, 0, 0.25);
+  transition: transform 150ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.demo-range:active::-webkit-slider-thumb {
+  transform: scale(1.12);
+}
+
+.demo-range:active::-moz-range-thumb {
+  transform: scale(1.12);
+}
+
+.demo-range:focus-visible {
+  outline: none;
+}
+
+.demo-range:focus-visible::-webkit-slider-thumb {
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.5),
+    0 0 0 3px var(--demo-cycle);
+}
+
+.demo-range:focus-visible::-moz-range-thumb {
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.5),
+    0 0 0 3px var(--demo-cycle);
 }
 
 @media (prefers-reduced-motion: reduce) {

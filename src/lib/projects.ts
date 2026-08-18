@@ -26,6 +26,8 @@ export type Project = {
   caseStudy?: CaseStudyPoint[];
   /** Renders the interactive Ambient Coach demo on the detail page. */
   walkthrough?: "whoop";
+  /** Renders the playable slice of the portal concept below it. */
+  portalDemo?: boolean;
   decisions?: { heading: string; body: string }[];
   next?: string[];
   disclaimer?: string;
@@ -37,16 +39,23 @@ export const projects: Project[] = [
     title: "Whoop Ambient Coach",
     year: "2026",
     tagline:
-      "A concept redesign of WHOOP's AI coach — coaching folded into the rings you already check, instead of behind a separate chat.",
+      "A concept redesign of WHOOP's web portal — coaching folded into the rings you already check, plus the two things the product doesn't track: what you eat, and where you are in your cycle.",
     status: "In progress — not live yet",
-    tags: ["Next.js", "TypeScript", "Tailwind CSS", "Motion", "Product Design"],
-    links: [
-      { label: "Source", isPrivate: true },
+    tags: [
+      "Next.js",
+      "TypeScript",
+      "Tailwind CSS",
+      "Motion",
+      "Recharts",
+      "Product Design",
+      "User Research",
     ],
+    links: [{ label: "Source", isPrivate: true }],
     overview: [
-      "WHOOP's AI coach is a destination — a chat screen you have to go find. Most people check their Recovery number in the morning and never open it, which means the interpretation of the number lives one tap away from the number itself.",
-      "Ambient Coach is my argument for collapsing that gap: the insight types itself out the instant each metric's ring finishes drawing. Same data, same screen — what changes is whether the coaching has to be requested.",
-      "I built this as a business case study rather than an engineering demo, since the role I'm aiming at is on the business side. The question it answers isn't \"can this be built\" — it's \"what does moving the coaching earn you.\"",
+      "I wear a WHOOP, and most mornings I check my recovery score and close the app without opening the coach. The interpretation of the number lives one tap away from the number itself, and that tap is enough to stop me.",
+      "I wanted to know whether that was just me, so I surveyed WHOOP wearers alongside people on Garmin, Oura, and Apple Watch about what they actually do with their data. The pattern held across all of them.",
+      "The result is two surfaces. A case study arguing the point — the coaching types itself out the instant each ring finishes drawing — and a full seven-screen portal that takes the idea seriously: dashboard, activity, sleep, nutrition, cycle, coach, profile. Same data, same screen; what changes is whether the coaching has to be requested.",
+      "I built it as a business case rather than an engineering demo, since the role I'm aiming at is on the business side. The question isn't \"can this be built\" — it's what moving the coaching earns you, and which gaps in the product are worth money to close.",
     ],
     caseStudy: [
       {
@@ -62,10 +71,11 @@ export const projects: Project[] = [
       {
         n: "03",
         label: "Impact",
-        body: "Insight visible in the first two seconds → more daily opens, and a stronger wedge to upsell deeper coaching tiers.",
+        body: "Insight visible in the first two seconds → more daily opens, and a stronger wedge to upsell deeper coaching tiers. Nutrition opens a data category the platform doesn't hold at all.",
       },
     ],
     walkthrough: "whoop",
+    portalDemo: true,
     decisions: [
       {
         heading: "Goal-aware before it's data-aware",
@@ -76,21 +86,33 @@ export const projects: Project[] = [
         body: "WHOOP's real interface is near-monochrome, and color is reserved for recovery zone status. I held that line: pure black and white everywhere, with green/yellow/red appearing only on the recovery ring, computed from the value itself.",
       },
       {
-        heading: "Nutrition as the upstream lever",
-        body: "I added a nutrition tab — hydration, protein, meal timing, caffeine cutoff — because food quality sits underneath recovery, sleep, and strain. It's the input most often missing from the loop.",
+        heading: "Nutrition is added, not redesigned",
+        body: "There is no food data anywhere in WHOOP's product or its public API — it measures the outputs of what you eat in exhaustive detail and collects none of the inputs. So the nutrition tab is net-new: food logging, macro targets, hydration, and a panel tying yesterday's protein and sodium to this morning's recovery. The strategic read is that this isn't a UI gap, it's a data-acquisition one, and you close it with partnerships rather than a feature sprint.",
+      },
+      {
+        heading: "Cycle tracking that explains instead of flags",
+        body: "Hormones move HRV, resting heart rate, temperature, and sleep on their own schedule, so a luteal-phase dip is normal rather than a recovery failure. Every metric on that screen is read against the user's current phase. This is the one area I have no personal read on, so I leaned on a friend who lives with it monthly — her input reshaped the whole tab.",
+      },
+      {
+        heading: "One context object, rebuilt every render",
+        body: "The coaching reads from a single object assembled from live state rather than a frozen snapshot. An earlier version computed it once at module load, which meant logging a meal moved the rings while the coach carried on quoting the old totals. Now the two cannot disagree: log food and the coaching accounts for it immediately.",
+      },
+      {
+        heading: "Fixtures shaped like the real API",
+        body: "The sample data uses WHOOP's actual v2 field names — recovery_score, hrv_rmssd_milli, sleep_needed broken into baseline, debt, and strain. And the numbers reconcile: sleep performance is genuinely time-asleep over need, and every macro is summed from the food table rather than written down.",
       },
       {
         heading: "Rule-based, and honest about it",
-        body: "The coach logic is a deterministic rule set, not a live language model. That's deliberate: the concept is about where AI coaching appears, not which model generates it, and a scripted version keeps the demo free to run and predictable to show.",
+        body: "The coach logic is a deterministic rule set, not a live language model. That's deliberate: the concept is about where AI coaching appears, not which model generates it, and a scripted version keeps the demo free to run, predictable to show, and free of an API key that a public page would expose.",
       },
     ],
     next: [
-      "Deploy a public build — with rate limiting in place first if the coach ever gets a real model behind it.",
-      "Record a short screen capture walking through the goal → biomarker → insight flow.",
-      "Pressure-test the copy with people who actually wear the band daily.",
+      "Record a screen capture walking through the ring → coach → nutrition → cycle flow.",
+      "Fix the iOS issues found in review: inputs under 16px zoom the page on focus, and the bottom nav needs a safe-area inset.",
+      "Decide whether a gated public build is worth it, or whether the video does the job on its own.",
     ],
     disclaimer:
-      "Concept project. Biomarker and nutrition data shown here is illustrative sample data, not real WHOOP output. Not affiliated with, endorsed by, or built using any proprietary WHOOP materials.",
+      "Concept project. Biomarker, nutrition, and cycle data shown here is illustrative sample data for a fictional account, not real WHOOP output — structured to match the field names in WHOOP's public API documentation, which is the only WHOOP source this draws on. Not affiliated with, endorsed by, or built using any proprietary WHOOP materials.",
   },
   {
     slug: "personal-website",
