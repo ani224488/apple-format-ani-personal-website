@@ -1,45 +1,94 @@
+import Link from "next/link";
 import type { Metadata } from "next";
 import { projects } from "@/lib/projects";
-import { ProjectGallery } from "@/components/project-gallery";
 
-export const metadata: Metadata = {
-  title: "Projects — Ani",
-};
+export const metadata: Metadata = { title: "Projects — Ani" };
 
+/**
+ * Projects index.
+ *
+ * Content comes from `src/lib/projects.ts` unchanged — this is a presentation
+ * pass, so nothing here retypes a tagline or invents a tag. The private-source
+ * project renders its link as a muted label rather than an anchor, because a
+ * link to a private repo is a 404 with extra steps.
+ */
 export default function ProjectsPage() {
   return (
-    <div className="fade-up">
-      <p className="text-sm font-medium text-accent">Projects</p>
-      <h1 className="mt-2 text-[clamp(2rem,5vw,2.75rem)] font-semibold leading-[1.1] tracking-[-0.03em]">
+    <div className="mx-auto w-full" style={{ maxWidth: 1180, padding: "clamp(90px,13vh,160px) clamp(20px,4vw,40px) clamp(80px,10vh,140px)" }}>
+      <div className="site-eyebrow">Projects</div>
+      <h2 className="font-semibold" style={{ marginTop: 16, fontSize: "clamp(28px,3.4vw,44px)", lineHeight: 1.08, letterSpacing: "-0.03em" }}>
         Things I&rsquo;ve built.
-      </h1>
-      <p className="mt-3 max-w-xl text-[1.05rem] leading-7 text-muted">
+      </h2>
+      <p style={{ marginTop: 16, maxWidth: "62ch", fontSize: 16, lineHeight: 1.6, color: "var(--muted)" }}>
         Each one has a walkthrough — what the problem was, what I decided, and
         what I&rsquo;d do next.
       </p>
 
-      <div className="mt-6 flex max-w-xl items-start gap-3 rounded-2xl border border-accent/25 bg-accent/[0.06] p-4">
-        <span className="mt-0.5 shrink-0 text-accent" aria-hidden>
-          <PlayIcon />
-        </span>
-        <p className="text-sm leading-6 text-muted">
-          <span className="font-medium text-foreground">
+      <div
+        className="rounded-2xl border"
+        style={{ marginTop: 30, maxWidth: 760, padding: "22px 24px", background: "rgba(10,132,255,0.06)", borderColor: "rgba(10,132,255,0.28)" }}
+      >
+        <p style={{ fontSize: 15.5, lineHeight: 1.55, color: "var(--muted)" }}>
+          <span style={{ color: "var(--foreground)", fontWeight: 500 }}>
             Some of these have small live demos built right into the page.
           </span>{" "}
-          They run in your browser — no sign-up, nothing to install. Click
-          around and break things, that&rsquo;s what they&rsquo;re there for.
+          They run in your browser — no sign-up, nothing to install. Click around
+          and break things, that&rsquo;s what they&rsquo;re there for.
         </p>
       </div>
 
-      <ProjectGallery projects={projects} />
-    </div>
-  );
-}
+      <div className="grid" style={{ marginTop: 38, gap: 20, gridTemplateColumns: "repeat(auto-fit,minmax(320px,1fr))" }}>
+        {projects.map((p) => {
+          const source = p.links[0];
+          return (
+            <div
+              key={p.slug}
+              className="flex flex-col overflow-hidden rounded-3xl border transition-all duration-[400ms] hover:-translate-y-1"
+              style={{ background: "var(--surface-soft)", borderColor: "var(--surface-border)", transitionTimingFunction: "cubic-bezier(.2,.8,.2,1)" }}
+            >
+              <div className="relative" style={{ height: 170, background: "var(--surface-soft)", borderBottom: "1px solid var(--surface-border)" }}>
+                <span className="site-eyebrow absolute" style={{ left: 18, bottom: 18 }}>{p.year}</span>
+              </div>
 
-function PlayIcon() {
-  return (
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-      <path d="M8 5.14v13.72a1 1 0 0 0 1.54.84l10.36-6.86a1 1 0 0 0 0-1.68L9.54 4.3A1 1 0 0 0 8 5.14Z" />
-    </svg>
+              <div className="flex flex-1 flex-col" style={{ padding: 24 }}>
+                <div className="flex flex-wrap items-center gap-3">
+                  <h3 style={{ fontSize: 19, fontWeight: 600, letterSpacing: "-0.015em" }}>{p.title}</h3>
+                  {p.status && (
+                    <span className="site-amber-pill rounded-full" style={{ padding: "5px 10px", fontFamily: "ui-monospace, 'SF Mono', Menlo, monospace", fontSize: 10.5, letterSpacing: "0.14em", textTransform: "uppercase" }}>
+                      In progress
+                    </span>
+                  )}
+                </div>
+
+                <p style={{ marginTop: 14, fontSize: 15, lineHeight: 1.55, color: "var(--muted)" }}>{p.tagline}</p>
+
+                <div className="flex flex-wrap" style={{ marginTop: 18, gap: 7 }}>
+                  {p.tags.map((t) => (
+                    <span key={t} className="rounded-full border" style={{ padding: "6px 11px", fontSize: 12, borderColor: "var(--surface-border)", color: "var(--muted)" }}>
+                      {t}
+                    </span>
+                  ))}
+                </div>
+
+                <div className="flex flex-wrap items-center gap-5" style={{ marginTop: "auto", paddingTop: 22, fontSize: 14 }}>
+                  <Link href={`/projects/${p.slug}`} className="inline-flex min-h-11 items-center" style={{ color: "var(--accent)" }}>
+                    Read the walkthrough
+                  </Link>
+                  {source?.isPrivate ? (
+                    <span className="inline-flex min-h-11 items-center" style={{ color: "var(--muted)" }}>
+                      Source private
+                    </span>
+                  ) : source?.href ? (
+                    <a href={source.href} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center" style={{ color: "var(--muted)" }}>
+                      {source.label}
+                    </a>
+                  ) : null}
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
   );
 }

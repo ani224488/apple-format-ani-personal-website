@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { SITE_TOKENS } from "./tokens";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
@@ -13,7 +14,11 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" suppressHydrationWarning className="h-full antialiased">
-      <body className="min-h-full flex flex-col">
+      <body className="site min-h-full flex flex-col">
+        {/* The design's token layer. Scoped to `.site` on the body rather than
+            `:root` so the demo frame's own palette, which must stay dark in
+            both themes, can sit inside it without being overridden. */}
+        <style>{SITE_TOKENS}</style>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
@@ -21,7 +26,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           disableTransitionOnChange
         >
           <Nav />
-          <main className="flex-1 w-full max-w-6xl mx-auto px-5 sm:px-8 lg:px-12 py-14 sm:py-20">
+          {/* No max-width or padding here any more: the hero runs full-bleed
+              and every other page sets its own measure (900px for reading
+              pages, 1180px for wide ones). Constraining here would box the
+              hero back in. */}
+          <main className="w-full flex-1">
             <PageTransition>{children}</PageTransition>
           </main>
           <Footer />

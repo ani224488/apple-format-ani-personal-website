@@ -12,10 +12,12 @@ export function Footer() {
         </a>
         <span className="text-surface-border">·</span>
         <a
-          href="mailto:aniundrakonda@gmail.com"
+          href="https://linkedin.com/in/aniundrakonda"
+          target="_blank"
+          rel="noopener noreferrer"
           className="transition-colors duration-150 hover:text-foreground"
         >
-          Email
+          LinkedIn
         </a>
       </div>
       <p className="mt-3 text-xs">Built with Next.js, Tailwind, and Motion.</p>
